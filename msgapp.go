@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 )
 
 func (ma *MsgApp) Initialize() {
@@ -15,19 +16,29 @@ func (ma *MsgApp) Initialize() {
 	} else {
 		ADDRHOST = MASTERHOST
 	}
+	if MASTERPORT == "" {
+		MASTERPORT = DEFAULTPORT
+	}
 	var addr = flag.String("addr", ADDRHOST+":"+MASTERPORT, "http service address")
 	if MASTERHOST == "" {
 		ma.Mode = "master"
-		runMaster(addr)
+		log.Println("Running as MASTER on Port " + MASTERPORT)
+		go runMaster(addr)
+		runNode(addr)
 	} else {
+		log.Println("Running as NODE")
 		ma.Mode = "node"
 		runNode(addr)
 	}
 }
 
 func runMaster(addr *string) {
-	log.Println("Running as MASTER")
-	log.Println(MASTERPORT)
+	f, err := os.OpenFile("master.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalf("error opening file: %v", err)
+	}
+	defer f.Close()
+	log.SetOutput(f)
 	flag.Parse()
 	log.SetFlags(0)
 
@@ -37,7 +48,6 @@ func runMaster(addr *string) {
 }
 
 func runNode(addr *string) {
-	log.Println("Running as NODE")
 	if MASTERHOST == "" {
 		MASTERHOST = "localhost"
 	}

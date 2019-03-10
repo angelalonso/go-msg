@@ -24,6 +24,7 @@ type message struct {
 }
 
 var MASTERHOST = os.Getenv("GOMSG_MASTER_HOST")
+var DEFAULTPORT = "8040"
 var MASTERPORT = os.Getenv("GOMSG_MASTER_PORT")
 var USER = os.Getenv("GOMSG_USER")
 var prompt = "@" + userTo + ">>"
