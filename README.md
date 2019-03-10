@@ -12,5 +12,6 @@ go build && GOMSG_MASTER_HOST=localhost GOMSG_MASTER_PORT=8040 ./go-msg
 
 # KNOWN ISSUES
 Loads. Currently working on:
-- Running master should also run a node (user is also master)
 - Disconnection is not handled
+- Name change is not propagated
+- No feedback after message is sent
