@@ -33,7 +33,12 @@ func (ma *MsgApp) Initialize() {
 }
 
 func runMaster(addr *string) {
-	f, err := os.OpenFile("master.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	//TODO: move the log init to a function (Write function needed?)
+	_, err := os.Create("master.log")
+	if err != nil {
+		log.Fatal(err)
+	}
+	f, err := os.OpenFile("master.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
 	}
